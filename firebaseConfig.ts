@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 // Optionally import the services that you want to use
 // import {...} from "firebase/auth";
@@ -10,16 +10,20 @@ import { getFirestore } from 'firebase/firestore';
 
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: 'api-key',
-  authDomain: 'project-id.firebaseapp.com',
-  databaseURL: 'https://project-id.firebaseio.com',
-  projectId: 'project-id',
-  storageBucket: 'project-id.appspot.com',
-  messagingSenderId: 'sender-id',
-  appId: 'app-id',
-  measurementId: 'G-measurement-id',
-};
+    apiKey: "AIzaSyCEUeuZeeRKYdfYbEG2dywaSjXo1yY_9y8",
+    authDomain: "flyerdeals-36d67.firebaseapp.com",
+    projectId: "flyerdeals-36d67",
+    storageBucket: "flyerdeals-36d67.appspot.com",
+    messagingSenderId: "1072328054162",
+    appId: "1:1072328054162:web:0bf4184d9974ac3ef65d4b"
+  };
+
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const database = getFirestore(app);
+
+const db = {
+    productsCollection: collection(database, 'products')
+}
+
 export { db };
