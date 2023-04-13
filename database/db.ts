@@ -11,6 +11,7 @@ import {
   DocumentData,
   Query,
   startAfter,
+  orderBy,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
@@ -38,18 +39,15 @@ export async function dbGetProducts(
   if (lastVisible) {
     getDataQuery = query(
       db.productsCollection,
+      orderBy('name'),
       startAfter(lastVisible),
-      limit(numberOfItems)
+      limit(numberOfItems),
     );
   } else {
-    getDataQuery = query(db.productsCollection, limit(numberOfItems));
+    getDataQuery = query(db.productsCollection, orderBy('name'), limit(numberOfItems));
   }
 
   const snaps = await getDocs(getDataQuery);
-
-  if (snaps.size > numberOfItems) {
-    ended = true;
-  }
 
   snaps.forEach((doc) => {
     const product: Product = {
@@ -60,6 +58,11 @@ export async function dbGetProducts(
   });
 
   const nextLast = snaps.docs[snaps.docs.length - 1];
+
+  if (!nextLast) {
+    ended = true;
+  }
+
   return [products, nextLast, ended];
 }
 

@@ -6,6 +6,7 @@ import {
   HStack,
   Heading,
   Image,
+  Spinner,
   Text,
   VStack,
 } from 'native-base';
@@ -14,10 +15,9 @@ import { Product, dbGetProducts } from '../../database/db';
 import { Pressable } from 'react-native';
 import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 
-const NUMBER_OF_ITEMS = 10;
+const NUMBER_OF_ITEMS = 20;
 
 const ListItem = ({ item }: { item: Product }) => {
-  console.log('render', item.id);
   const data = item.data;
 
   const handleShowDetail = useCallback(() => {
@@ -88,7 +88,18 @@ function itemPropsAreEqual(
 const ListItemMemo = React.memo(ListItem, itemPropsAreEqual);
 
 const ListFooter = () => {
-  return <Text>Loading...</Text>;
+  return <Spinner accessibilityLabel="Loading posts" size="sm" />;
+};
+
+const LoadingScreen = () => {
+  return (
+    <VStack alignItems="center" justifyContent="center" h="100%" space="2">
+      <Spinner accessibilityLabel="Loading posts" size="lg" />
+      <Heading color="primary.500" fontSize="md">
+        Loading Deals
+      </Heading>
+    </VStack>
+  );
 };
 
 export default function HomeScreen() {
@@ -114,14 +125,19 @@ export default function HomeScreen() {
     if (ended || isLoading) return;
 
     setIsLoading(true);
-    const [newProducts, snap] = await dbGetProducts(
+    const [newProducts, snap, isEnded] = await dbGetProducts(
       NUMBER_OF_ITEMS,
       lastSnapshot
     );
     setProducts((previousState) => [...previousState, ...newProducts]);
     setLastSnapshot(snap);
+    setEnded(isEnded);
     setIsLoading(false);
   }, [lastSnapshot, ended, isLoading]);
+
+  if (products.length === 0) {
+    return <LoadingScreen />;
+  }
 
   return (
     <FlatList
@@ -132,8 +148,9 @@ export default function HomeScreen() {
       renderItem={({ item }) => <ListItemMemo item={item}></ListItemMemo>}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.2}
-      refreshing={isLoading}
-      ListFooterComponent={ListFooter}
+      ListFooterComponent={() =>
+        isLoading && products.length > 0 ? <ListFooter /> : null
+      }
       disableScrollViewPanResponder={true}
     ></FlatList>
   );
