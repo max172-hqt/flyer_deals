@@ -4,13 +4,13 @@
 // add to cart for user
 
 import {
-  collection,
   getDocs,
-  addDoc,
-  doc,
-  deleteDoc,
-  updateDoc,
-  getDoc,
+  query,
+  limit,
+  QueryDocumentSnapshot,
+  DocumentData,
+  Query,
+  startAfter,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
@@ -19,19 +19,39 @@ export interface Product {
   data: ProductData;
 }
 
-interface ProductData {
+export interface ProductData {
   name: string;
   salePrice: string | undefined;
   regularPrice: string | undefined;
   imageUrl: string;
 }
 
-export async function dbGetProducts(): Promise<Product[]> {
+export async function dbGetProducts(
+  numberOfItems: number,
+  lastVisible?: QueryDocumentSnapshot<DocumentData>
+): Promise<[Product[], QueryDocumentSnapshot<DocumentData>, boolean]> {
+  console.log(lastVisible);
   const products: Product[] = [];
+  let getDataQuery: Query<DocumentData>;
+  let ended = false;
 
-  const snap = await getDocs(db.productsCollection);
+  if (lastVisible) {
+    getDataQuery = query(
+      db.productsCollection,
+      startAfter(lastVisible),
+      limit(numberOfItems)
+    );
+  } else {
+    getDataQuery = query(db.productsCollection, limit(numberOfItems));
+  }
 
-  snap.forEach((doc) => {
+  const snaps = await getDocs(getDataQuery);
+
+  if (snaps.size > numberOfItems) {
+    ended = true;
+  }
+
+  snaps.forEach((doc) => {
     const product: Product = {
       id: doc.id,
       data: doc.data() as ProductData,
@@ -39,7 +59,8 @@ export async function dbGetProducts(): Promise<Product[]> {
     products.push(product);
   });
 
-  return products;
+  const nextLast = snaps.docs[snaps.docs.length - 1];
+  return [products, nextLast, ended];
 }
 
 // export async function dbCreateTask({ description, completed }) {
