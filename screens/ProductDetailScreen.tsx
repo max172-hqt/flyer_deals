@@ -1,10 +1,14 @@
 import { Box, Text } from 'native-base';
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../redux/store';
+import ListItemDetail from '../components/ListItemDetails';
 
 export default function ProductDetailScreen() {
+  const item = useSelector((state: RootState) => state.product.currentProduct);
+  console.log(item);
+
   return (
-    <Box flex={1} bg="primary.400" alignItems="center" justifyContent="center">
-      <Text>Shopping List</Text>
-    </Box>
+    <ListItemDetail item={item} />
   );
 }

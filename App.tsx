@@ -6,13 +6,13 @@ import HomeScreen from './screens/HomeScreen';
 import ShoppingListScreen from './screens/ShoppingListScreen';
 import 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { store } from './redux/store'
-import { Provider } from 'react-redux'
+import { store } from './redux/store';
+import { Provider } from 'react-redux';
 import { registerRootComponent } from 'expo';
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+function App() {
   return (
     <NavigationContainer>
       <NativeBaseProvider>
@@ -37,9 +37,7 @@ export default function App() {
                 throw new Error('Unknown tab');
               }
 
-              return (
-                <Ionicons name={iconName} size={size} color={color} />
-              );
+              return <Ionicons name={iconName} size={size} color={color} />;
             },
           })}
         >
@@ -51,10 +49,13 @@ export default function App() {
   );
 }
 
-const RootComponent = () => (
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
+const RootComponent = () => {
+  console.log('here', store.getState());
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};
 
 registerRootComponent(RootComponent);

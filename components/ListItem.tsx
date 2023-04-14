@@ -1,13 +1,38 @@
-import { useCallback } from "react";
-import { Product } from "../database/db";
-import { AspectRatio, Box, HStack, Pressable, Image, VStack, Heading, Text, Button, Badge, List } from "native-base";
-import React from "react";
+import { Product } from '../database/db';
+import {
+  AspectRatio,
+  Box,
+  HStack,
+  Pressable,
+  Image,
+  VStack,
+  Heading,
+  Text,
+  Button,
+  Badge,
+} from 'native-base';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentProduct } from '../redux/productSlice';
 
-function ListItem({ item, handleGoToDetail }: { item: Product, handleGoToDetail: () => void }) {
-  const { name, imageUrl, salePrice, regularPrice, tags, description} = item.data;
+function ListItem({
+  item,
+  handleGoToDetail,
+}: {
+  item: Product;
+  handleGoToDetail: () => void;
+}) {
+  const dispatch = useDispatch();
+  const { name, imageUrl, salePrice, regularPrice, tags, description } =
+    item.data;
+
+  const handleOnPressItem = () => {
+    dispatch(setCurrentProduct(item));
+    handleGoToDetail();
+  };
 
   return (
-    <Pressable onPress={handleGoToDetail}>
+    <Pressable onPress={handleOnPressItem}>
       <Box bg={'white'} m="2" p="4" borderRadius={16}>
         <HStack alignContent="center" space="3" justifyContent="center">
           <AspectRatio ratio={9 / 16} w="2/5">
@@ -19,7 +44,7 @@ function ListItem({ item, handleGoToDetail }: { item: Product, handleGoToDetail:
           </AspectRatio>
           <VStack pl="4" w="3/5" justifyContent="space-between" space={2}>
             <VStack space="2">
-              <Heading size="sm" ml="-1" fontWeight="400" noOfLines={3}>
+              <Heading size="sm" ml="-1" fontWeight="500" noOfLines={3}>
                 {name}
               </Heading>
               <HStack justifyContent="start" alignItems="center" space="2">
@@ -50,23 +75,6 @@ function ListItem({ item, handleGoToDetail }: { item: Product, handleGoToDetail:
               <Text fontWeight={400} fontSize="xs" numberOfLines={5}>
                 {description}
               </Text>
-              <HStack flexWrap="wrap">
-                {tags.map((tag, index) => (
-                  <Badge
-                    colorScheme="darkBlue"
-                    _text={{
-                      color: 'white',
-                    }}
-                    variant="solid"
-                    rounded="4"
-                    mr="1"
-                    mb="1"
-                    key={tag + index}
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </HStack>
             </VStack>
             <Button
               // variant="primary"
@@ -79,7 +87,7 @@ function ListItem({ item, handleGoToDetail }: { item: Product, handleGoToDetail:
       </Box>
     </Pressable>
   );
-};
+}
 
 function itemPropsAreEqual(
   prevProps: Readonly<{ item: Product }>,

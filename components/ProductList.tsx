@@ -1,5 +1,5 @@
 import { FlatList, Spinner, VStack, Heading } from 'native-base';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Product, dbGetProducts } from '../database/db';
 import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import ListItem from './ListItem';
@@ -21,10 +21,10 @@ const LoadingScreen = () => {
   );
 };
 
-export default function ProductList({ navigation }) {
+export default function ProductList({ navigation }: { navigation: any }) {
   const [products, setProducts] = useState<Product[]>([
     {
-      id: "1",
+      id: '1',
       data: {
         name: 'Atlantic Lobster Tails Or Fresh Atlantic Salmon Portions',
         salePrice: '$4.99',
@@ -69,8 +69,8 @@ export default function ProductList({ navigation }) {
   }, [lastSnapshot, ended, isLoading]);
 
   const handleGoToDetail = () => {
-    navigation.navigate('Details')
-  }
+    navigation.navigate('Details');
+  };
 
   if (products.length === 0) {
     return <LoadingScreen />;
@@ -82,7 +82,9 @@ export default function ProductList({ navigation }) {
       data={products}
       initialNumToRender={NUMBER_OF_ITEMS}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <ListItem item={item} handleGoToDetail={handleGoToDetail}></ListItem>}
+      renderItem={({ item }) => (
+        <ListItem item={item} handleGoToDetail={handleGoToDetail}></ListItem>
+      )}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
       ListFooterComponent={() =>
