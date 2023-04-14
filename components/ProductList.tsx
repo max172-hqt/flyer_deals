@@ -3,6 +3,10 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Product, dbGetProducts } from '../database/db';
 import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import ListItem from './ListItem';
+import SearchBar from './SearchBar';
+import { RootState } from '../redux/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { appendProducts } from '../redux/productSlice';
 
 const NUMBER_OF_ITEMS = 10;
 
@@ -21,25 +25,9 @@ const LoadingScreen = () => {
   );
 };
 
-export default function ProductList({
-  navigation,
-}: {
-  navigation: any;
-}) {
-  const [products, setProducts] = useState<Product[]>([
-    {
-      id: '1',
-      data: {
-        name: 'Atlantic Lobster Tails Or Fresh Atlantic Salmon Portions',
-        salePrice: '$4.99',
-        regularPrice: undefined,
-        imageUrl: 'dam-img.rfdcontent.com/cms/009/467/864/9467864_original.jpg',
-        description:
-          'Atlantic lobster tails, frozen or thawed for your convenience 2 - 3 oz. Fresh Atlantic salmon portions. Selected varieties 113 g. Subject to availability. Prices and offers effective from Thursday, April 13th to Wednesday, April 19th, 2023 unless otherwise stated.',
-        tags: ['salmon', 'lobster', 'frozen'],
-      },
-    },
-  ]);
+export default function ProductList({ navigation }: { navigation: any }) {
+  const dispatch = useDispatch();
+  const products = useSelector((state: RootState) => state.product.products);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [ended, setEnded] = useState<boolean>(false);
 
@@ -50,8 +38,8 @@ export default function ProductList({
     return;
     (async () => {
       setIsLoading(true);
-      const [products, snap, ended] = await dbGetProducts(NUMBER_OF_ITEMS);
-      setProducts(products);
+      const [newProducts, snap, ended] = await dbGetProducts(NUMBER_OF_ITEMS);
+      dispatch(appendProducts(newProducts));
       setLastSnapshot(snap);
       setEnded(ended);
       setIsLoading(false);
@@ -67,7 +55,7 @@ export default function ProductList({
       NUMBER_OF_ITEMS,
       lastSnapshot
     );
-    setProducts((previousState) => [...previousState, ...newProducts]);
+    dispatch(appendProducts(newProducts));
     setLastSnapshot(snap);
     setEnded(isEnded);
     setIsLoading(false);
@@ -77,28 +65,33 @@ export default function ProductList({
     navigation.navigate('Details');
   };
 
+  const handleSearch = (query: string) => {
+    console.log(query);
+  }
+
   if (products.length === 0) {
     return <LoadingScreen />;
   }
 
   return (
-    <FlatList
-      // bg="white"
-      data={products}
-      initialNumToRender={NUMBER_OF_ITEMS}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <ListItem
-          item={item}
-          handleGoToDetail={handleGoToDetail}
-        ></ListItem>
-      )}
-      onEndReached={onEndReached}
-      onEndReachedThreshold={0.5}
-      ListFooterComponent={() =>
-        isLoading && products.length > 0 ? <ListFooter /> : null
-      }
-      disableScrollViewPanResponder={true}
-    ></FlatList>
+    <VStack>
+      <SearchBar handleSearch={handleSearch} />
+      <FlatList
+        // bg="white"
+        h="100%"
+        data={products}
+        initialNumToRender={NUMBER_OF_ITEMS}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ListItem item={item} handleGoToDetail={handleGoToDetail}></ListItem>
+        )}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() =>
+          isLoading && products.length > 0 ? <ListFooter /> : null
+        }
+        disableScrollViewPanResponder={true}
+      ></FlatList>
+    </VStack>
   );
 }

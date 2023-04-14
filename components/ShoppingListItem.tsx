@@ -8,6 +8,7 @@ import {
   VStack,
   Heading,
   Text,
+  Switch,
 } from 'native-base';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -31,7 +32,7 @@ function ShoppingListItem({
   return (
     <Pressable onPress={handleOnPressItem}>
       <Box bg={'white'} m="2" p="4" borderRadius={8}>
-        <HStack alignContent="center" space="3" justifyContent="center">
+        <HStack alignItems="center" space="3" justifyContent="flex-start">
           <AspectRatio ratio={1} w='1/5'>
             <Image
               source={{ uri: 'https://' + imageUrl }}
@@ -42,7 +43,7 @@ function ShoppingListItem({
           </AspectRatio>
           <VStack
             pl="4"
-            w={'4/5'}
+            w={'3/5'}
             justifyContent="space-between"
             space={2}
           >
@@ -50,7 +51,7 @@ function ShoppingListItem({
               <Heading size="sm" ml="-1" fontWeight="400" noOfLines={3}>
                 {name}
               </Heading>
-              <HStack justifyContent="start" alignItems="center" space="2">
+              <HStack justifyContent="flex-start" alignItems="center" space="2">
                 <Text
                   _light={{
                     color: 'red.500',
@@ -75,6 +76,7 @@ function ShoppingListItem({
               </HStack>
             </VStack>
           </VStack>
+          <Switch size="sm" />
         </HStack>
       </Box>
     </Pressable>

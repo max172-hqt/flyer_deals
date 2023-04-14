@@ -45,7 +45,7 @@ function ListItem({
               <Heading size="sm" ml="-1" fontWeight="400" noOfLines={3}>
                 {name}
               </Heading>
-              <HStack justifyContent="start" alignItems="center" space="2">
+              <HStack justifyContent="flex-start" alignItems="center" space="2">
                 <Text
                   _light={{
                     color: 'red.500',

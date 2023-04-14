@@ -12,6 +12,9 @@ import {
   Query,
   startAfter,
   orderBy,
+  or,
+  where,
+  and,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
@@ -70,6 +73,63 @@ export async function dbGetProducts(
   }
 
   console.log('getting ', snaps.size);
+
+  return [products, nextLast, ended];
+}
+
+export async function dbSearchProductsByPrefix(
+  prefix: string = "",
+  numberOfItems: number,
+  lastVisible?: QueryDocumentSnapshot<DocumentData>
+): Promise<[Product[], QueryDocumentSnapshot<DocumentData>, boolean]> {
+  const products: Product[] = [];
+  let getDataQuery: Query<DocumentData>;
+  let ended = false;
+
+  if (lastVisible) {
+    getDataQuery = query(
+      db.productsCollection,
+      or(
+        where('tags', 'array-contains', prefix),
+        and(
+          where('name', '>=', prefix),
+          where('name', '<=', prefix + '\uf8ff')
+        )
+      ),
+      // orderBy('name'),
+      startAfter(lastVisible),
+      limit(numberOfItems)
+    );
+  } else {
+    getDataQuery = query(
+      db.productsCollection,
+      or(
+        where('tags', 'array-contains', prefix),
+        and(
+          where('name', '>=', prefix),
+          where('name', '<=', prefix + '\uf8ff')
+        )
+      ),
+      // orderBy('name'),
+      limit(numberOfItems)
+    );
+  }
+
+  const snaps = await getDocs(getDataQuery);
+
+  snaps.forEach((doc) => {
+    const product: Product = {
+      id: doc.id,
+      data: doc.data() as ProductData,
+    };
+    products.push(product);
+  });
+
+  const nextLast = snaps.docs[snaps.docs.length - 1];
+
+  if (!nextLast) {
+    ended = true;
+  }
 
   return [products, nextLast, ended];
 }

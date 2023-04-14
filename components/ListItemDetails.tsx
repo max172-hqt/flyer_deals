@@ -9,7 +9,6 @@ import {
   Heading,
   Text,
   Badge,
-  Button,
 } from 'native-base';
 import AddToCartButton from './AddToCartButton';
 
@@ -34,7 +33,7 @@ export default function ListItemDetail({ item }: { item: Product | null }) {
             <Heading size="md" ml="-1" fontWeight="500">
               {name}
             </Heading>
-            <HStack justifyContent="start" alignItems="center" space="2">
+            <HStack justifyContent="flex-start" alignItems="center" space="2">
               <Text
                 _light={{
                   color: 'red.500',
