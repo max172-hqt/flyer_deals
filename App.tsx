@@ -18,7 +18,7 @@ function App() {
       <NativeBaseProvider>
         <Tab.Navigator
           screenOptions={({ route }) => ({
-            headerShown: route.name !== 'Home',
+            headerShown: false,
             // tabBarStyle: {
             //   backgroundColor: '#16375A',
             //   height: 60,

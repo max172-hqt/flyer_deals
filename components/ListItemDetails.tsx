@@ -11,6 +11,7 @@ import {
   Badge,
   Button,
 } from 'native-base';
+import AddToCartButton from './AddToCartButton';
 
 export default function ListItemDetail({ item }: { item: Product | null }) {
   if (!item) return null;
@@ -19,7 +20,7 @@ export default function ListItemDetail({ item }: { item: Product | null }) {
     item.data;
 
   return (
-    <Box bg={'white'} m="2" p="4" borderRadius={16}>
+    <Box bg={'white'} m="2" p="4" borderRadius={8}>
       <VStack alignContent="center" space="3" justifyContent="center">
         <AspectRatio ratio={16 / 9}>
           <Image
@@ -61,12 +62,7 @@ export default function ListItemDetail({ item }: { item: Product | null }) {
             <Text fontWeight={400} fontSize="sm">
               {description}
             </Text>
-            <Button
-              // variant="primary"
-              onPress={() => console.log('hello world')}
-            >
-              Add to cart
-            </Button>
+            <AddToCartButton item={item} />
             <VStack space="2">
               <Heading size="sm" ml="-1" fontWeight="500">
                 Tags

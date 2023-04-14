@@ -12,9 +12,8 @@ import {
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentProduct } from '../redux/productSlice';
-import AddToCartButton from './AddToCartButton';
 
-function ListItem({
+function ShoppingListItem({
   item,
   handleGoToDetail,
 }: {
@@ -33,14 +32,20 @@ function ListItem({
     <Pressable onPress={handleOnPressItem}>
       <Box bg={'white'} m="2" p="4" borderRadius={8}>
         <HStack alignContent="center" space="3" justifyContent="center">
-          <AspectRatio ratio={9 / 16} w="2/5">
+          <AspectRatio ratio={1} w='1/5'>
             <Image
               source={{ uri: 'https://' + imageUrl }}
               alt={name}
-              resizeMode="contain"
+              resizeMode='cover'
+              borderRadius={50}
             />
           </AspectRatio>
-          <VStack pl="4" w="3/5" justifyContent="space-between" space={2}>
+          <VStack
+            pl="4"
+            w={'4/5'}
+            justifyContent="space-between"
+            space={2}
+          >
             <VStack space="2">
               <Heading size="sm" ml="-1" fontWeight="400" noOfLines={3}>
                 {name}
@@ -69,12 +74,6 @@ function ListItem({
                 )}
               </HStack>
             </VStack>
-            <VStack space="2">
-              <Text fontWeight={400} fontSize="xs" numberOfLines={5}>
-                {description}
-              </Text>
-            </VStack>
-            <AddToCartButton item={item} />
           </VStack>
         </HStack>
       </Box>
@@ -89,4 +88,4 @@ function itemPropsAreEqual(
   return prevProps.item.id === nextProps.item.id;
 }
 
-export default React.memo(ListItem, itemPropsAreEqual);
+export default React.memo(ShoppingListItem, itemPropsAreEqual);

@@ -41,12 +41,16 @@ export async function dbGetProducts(
   if (lastVisible) {
     getDataQuery = query(
       db.productsCollection,
-      orderBy('name'),
+      // orderBy('name'),
       startAfter(lastVisible),
-      limit(numberOfItems),
+      limit(numberOfItems)
     );
   } else {
-    getDataQuery = query(db.productsCollection, orderBy('name'), limit(numberOfItems));
+    getDataQuery = query(
+      db.productsCollection,
+      // orderBy('name'),
+      limit(numberOfItems)
+    );
   }
 
   const snaps = await getDocs(getDataQuery);

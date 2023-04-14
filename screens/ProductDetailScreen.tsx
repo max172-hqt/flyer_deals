@@ -6,7 +6,6 @@ import ListItemDetail from '../components/ListItemDetails';
 
 export default function ProductDetailScreen() {
   const item = useSelector((state: RootState) => state.product.currentProduct);
-  console.log(item);
 
   return (
     <ListItemDetail item={item} />

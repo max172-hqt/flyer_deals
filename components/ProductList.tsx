@@ -1,10 +1,10 @@
 import { FlatList, Spinner, VStack, Heading } from 'native-base';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Product, dbGetProducts } from '../database/db';
 import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import ListItem from './ListItem';
 
-const NUMBER_OF_ITEMS = 20;
+const NUMBER_OF_ITEMS = 10;
 
 const ListFooter = () => {
   return <Spinner accessibilityLabel="Loading posts" size="sm" m="8" />;
@@ -21,7 +21,11 @@ const LoadingScreen = () => {
   );
 };
 
-export default function ProductList({ navigation }: { navigation: any }) {
+export default function ProductList({
+  navigation,
+}: {
+  navigation: any;
+}) {
   const [products, setProducts] = useState<Product[]>([
     {
       id: '1',
@@ -42,16 +46,17 @@ export default function ProductList({ navigation }: { navigation: any }) {
   const [lastSnapshot, setLastSnapshot] =
     useState<QueryDocumentSnapshot<DocumentData>>();
 
-  // useEffect(() => {
-  //   (async () => {
-  //     setIsLoading(true);
-  //     const [products, snap, ended] = await dbGetProducts(NUMBER_OF_ITEMS);
-  //     setProducts(products);
-  //     setLastSnapshot(snap);
-  //     setEnded(ended);
-  //     setIsLoading(false);
-  //   })();
-  // }, []);
+  useEffect(() => {
+    return;
+    (async () => {
+      setIsLoading(true);
+      const [products, snap, ended] = await dbGetProducts(NUMBER_OF_ITEMS);
+      setProducts(products);
+      setLastSnapshot(snap);
+      setEnded(ended);
+      setIsLoading(false);
+    })();
+  }, []);
 
   const onEndReached = useCallback(async () => {
     return;
@@ -83,7 +88,10 @@ export default function ProductList({ navigation }: { navigation: any }) {
       initialNumToRender={NUMBER_OF_ITEMS}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <ListItem item={item} handleGoToDetail={handleGoToDetail}></ListItem>
+        <ListItem
+          item={item}
+          handleGoToDetail={handleGoToDetail}
+        ></ListItem>
       )}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
