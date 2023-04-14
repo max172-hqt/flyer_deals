@@ -25,6 +25,8 @@ export interface ProductData {
   salePrice: string | undefined;
   regularPrice: string | undefined;
   imageUrl: string;
+  description: string;
+  tags: string[];
 }
 
 export async function dbGetProducts(

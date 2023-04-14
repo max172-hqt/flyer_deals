@@ -10,20 +10,19 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 // Initialize Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyCEUeuZeeRKYdfYbEG2dywaSjXo1yY_9y8",
-    authDomain: "flyerdeals-36d67.firebaseapp.com",
-    projectId: "flyerdeals-36d67",
-    storageBucket: "flyerdeals-36d67.appspot.com",
-    messagingSenderId: "1072328054162",
-    appId: "1:1072328054162:web:0bf4184d9974ac3ef65d4b"
-  };
-
+  apiKey: "AIzaSyBITjQBtxws14YaEbv8wpqMVaF60MuRo0U",
+  authDomain: "flyerdeals-c6493.firebaseapp.com",
+  projectId: "flyerdeals-c6493",
+  storageBucket: "flyerdeals-c6493.appspot.com",
+  messagingSenderId: "921804239927",
+  appId: "1:921804239927:web:6a602e9a968ed5a7b37bb2"
+};
 
 const app = initializeApp(firebaseConfig);
 const database = getFirestore(app);
 
 const db = {
-    productsCollection: collection(database, 'products')
-}
+  productsCollection: collection(database, 'products'),
+};
 
 export { db };
