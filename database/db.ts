@@ -22,8 +22,8 @@ export interface Product {
 
 export interface ProductData {
   name: string;
-  salePrice: string | undefined;
-  regularPrice: string | undefined;
+  salePrice: string | null | undefined;
+  regularPrice: string | null | undefined;
   imageUrl: string;
   description: string;
   tags: string[];
@@ -33,7 +33,7 @@ export async function dbGetProducts(
   numberOfItems: number,
   lastVisible?: QueryDocumentSnapshot<DocumentData>
 ): Promise<[Product[], QueryDocumentSnapshot<DocumentData>, boolean]> {
-  console.log(lastVisible);
+  console.log('calling api', lastVisible);
   const products: Product[] = [];
   let getDataQuery: Query<DocumentData>;
   let ended = false;
@@ -64,6 +64,8 @@ export async function dbGetProducts(
   if (!nextLast) {
     ended = true;
   }
+
+  console.log('getting ', snaps.size);
 
   return [products, nextLast, ended];
 }
