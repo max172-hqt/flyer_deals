@@ -3,16 +3,13 @@ import {
   Button,
   Center,
   FormControl,
-  HStack,
   Heading,
   Input,
-  Link,
   VStack,
-  Text,
 } from 'native-base';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { login, signup } from '../database/auth';
+import { signup } from '../database/auth';
 import { setUser } from '../redux/userSlice';
 
 export default function SignupForm() {

@@ -40,10 +40,14 @@ export const userSlice = createSlice({
     removeProductFromCart: (state, action: PayloadAction<string>) => {
       delete state.cart[action.payload];
     },
+    toggleCartItem: (state, action: PayloadAction<string>) => {
+      console.log(state.cart[action.payload]);
+      state.cart[action.payload].done = !state.cart[action.payload].done;
+    }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, resetUser, setCart, addProductToCart, removeProductFromCart } =
+export const { setUser, resetUser, setCart, addProductToCart, removeProductFromCart, toggleCartItem } =
   userSlice.actions;
 export default userSlice.reducer;

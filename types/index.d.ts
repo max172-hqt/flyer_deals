@@ -52,6 +52,7 @@ export interface Product {
 
 export interface CartItem extends Product {
   firebaseRefId: string;
+  done: boolean;
 }
 
 export interface Product {

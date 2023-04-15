@@ -31,7 +31,7 @@ export default function AddToCartButton({ item }: { item: Product }) {
       dispatch(
         addProductToCart({
           id: item.id,
-          cartItem: { ...item, firebaseRefId: refId },
+          cartItem: { ...item, firebaseRefId: refId, done: false },
         })
       );
     } catch (err) {

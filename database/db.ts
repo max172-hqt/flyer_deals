@@ -16,6 +16,8 @@ import {
   and,
   addDoc,
   deleteDoc,
+  getDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import type { CartItem, Product, ProductData, User } from '../types';
@@ -130,14 +132,27 @@ export async function dbGetCart(user: User): Promise<CartItem[]> {
   const cartItems: CartItem[] = [];
 
   snaps.forEach((doc) => {
-    const product = doc.data().product as Product;
+    const data = doc.data();
+    const product = data.product as Product;
     const cartItem: CartItem = {
       id: product.id,
       firebaseRefId: doc.id,
       data: product.data,
+      done: data.done,
     };
     cartItems.push(cartItem);
   });
 
   return cartItems;
+}
+
+export async function dbUpdateStatus(id: string) {
+  const dbDoc = db.getCartItem(id);
+  const docSnap = await getDoc(dbDoc);
+  if (docSnap.exists()) {
+    const done: boolean = docSnap.data().done;
+    await updateDoc(dbDoc, {
+      done: !done,
+    });
+  }
 }

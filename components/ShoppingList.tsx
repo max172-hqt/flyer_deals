@@ -20,6 +20,8 @@ export default function ShoppingList({ navigation }: ShoppingListProps) {
     [cart]
   );
 
+  // console.log(data);
+
   return (
     <FlatList
       data={data}
