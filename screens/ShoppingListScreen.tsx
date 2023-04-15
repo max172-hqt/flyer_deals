@@ -40,7 +40,7 @@ export default function ShoppingListScreen() {
 
   if (!isLoggedIn) {
     return (
-      <AuthenticateStack.Navigator initialRouteName="Login">
+      <AuthenticateStack.Navigator initialRouteName="Unauthenticated">
         <AuthenticateStack.Screen
           name="Unauthenticated"
           component={Unauthenticated}

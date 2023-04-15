@@ -33,6 +33,7 @@ export type ProductListProps = StackScreenProps<ProductListStackParamList, 'List
 export type ShoppingListProps = StackScreenProps<ShoppingListStackParamList, 'List'>
 export type UnauthenticatedProps = StackScreenProps<AuthenticateStackParamList, 'Unauthenticated'>
 export type LoginProps = StackScreenProps<AuthenticateStackParamList, 'Login'>
+export type SignupProps = StackScreenProps<AuthenticateStackParamList, 'Signup'>
 
 // ========== ENTITIES ==========
 export interface ProductData {
