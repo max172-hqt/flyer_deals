@@ -30,7 +30,7 @@ export default function ListItemDetail({ item }: { item: Product | null }) {
         </AspectRatio>
         <VStack justifyContent="space-between" space="2">
           <VStack space="2">
-            <Heading size="md" ml="-1" fontWeight="500">
+            <Heading size="md" fontWeight="500">
               {name}
             </Heading>
             <HStack justifyContent="flex-start" alignItems="center" space="2">

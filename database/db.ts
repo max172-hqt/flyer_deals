@@ -78,42 +78,25 @@ export async function dbGetProducts(
 }
 
 export async function dbSearchProductsByPrefix(
-  prefix: string = "",
-  numberOfItems: number,
-  lastVisible?: QueryDocumentSnapshot<DocumentData>
-): Promise<[Product[], QueryDocumentSnapshot<DocumentData>, boolean]> {
+  prefix: string = '',
+  numberOfItems: number
+): Promise<Product[]> {
   const products: Product[] = [];
-  let getDataQuery: Query<DocumentData>;
-  let ended = false;
+  const capitalizedPrefix = prefix.charAt(0).toUpperCase() + prefix.slice(1);
+  console.log(capitalizedPrefix);
 
-  if (lastVisible) {
-    getDataQuery = query(
-      db.productsCollection,
-      or(
-        where('tags', 'array-contains', prefix),
-        and(
-          where('name', '>=', prefix),
-          where('name', '<=', prefix + '\uf8ff')
-        )
-      ),
-      // orderBy('name'),
-      startAfter(lastVisible),
-      limit(numberOfItems)
-    );
-  } else {
-    getDataQuery = query(
-      db.productsCollection,
-      or(
-        where('tags', 'array-contains', prefix),
-        and(
-          where('name', '>=', prefix),
-          where('name', '<=', prefix + '\uf8ff')
-        )
-      ),
-      // orderBy('name'),
-      limit(numberOfItems)
-    );
-  }
+  const getDataQuery = query(
+    db.productsCollection,
+    or(
+      where('tags', 'array-contains', prefix),
+      where('tags', 'array-contains', prefix.toLowerCase()),
+      and(
+        where('name', '>=', capitalizedPrefix),
+        where('name', '<=', capitalizedPrefix + '\uf8ff')
+      )
+    ),
+    limit(numberOfItems)
+  );
 
   const snaps = await getDocs(getDataQuery);
 
@@ -125,13 +108,7 @@ export async function dbSearchProductsByPrefix(
     products.push(product);
   });
 
-  const nextLast = snaps.docs[snaps.docs.length - 1];
-
-  if (!nextLast) {
-    ended = true;
-  }
-
-  return [products, nextLast, ended];
+  return products;
 }
 
 // export async function dbCreateTask({ description, completed }) {

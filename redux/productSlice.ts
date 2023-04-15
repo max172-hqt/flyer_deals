@@ -5,6 +5,7 @@ import { Product, ProductData } from '../database/db';
 export interface ProductState {
   currentProduct: Product | null;
   products: Product[];
+  searchResults: Product[];
   cart: Record<string, ProductData>;
 }
 
@@ -26,13 +27,17 @@ const sampleProducts = [
 const initialState: ProductState = {
   currentProduct: null,
   cart: {},
-  products: sampleProducts,
+  products: [],
+  searchResults: [],
 };
 
 export const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
+    setProducts: (state, action: PayloadAction<Product[]>) => {
+      state.products = action.payload
+    },
     appendProducts: (state, action: PayloadAction<Product[]>) => {
       state.products.push(...action.payload);
     },
@@ -45,6 +50,12 @@ export const productSlice = createSlice({
     removeProductFromCart: (state, action: PayloadAction<string>) => {
       delete state.cart[action.payload];
     },
+    removeSearchResult: (state) => {
+      state.searchResults = [];
+    },
+    setSearchResults: (state, action: PayloadAction<Product[]>) => {
+      state.searchResults = action.payload;
+    }
   },
 });
 
@@ -53,6 +64,9 @@ export const {
   setCurrentProduct,
   addProductToCart,
   removeProductFromCart,
+  setProducts,
   appendProducts,
+  removeSearchResult,
+  setSearchResults,
 } = productSlice.actions;
 export default productSlice.reducer;

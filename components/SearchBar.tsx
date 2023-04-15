@@ -1,4 +1,4 @@
-import { Button, HStack, Heading, Icon, Input, PresenceTransition, VStack } from 'native-base';
+import { Button, HStack, Icon, Input } from 'native-base';
 import React, { useState } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Keyboard } from 'react-native';
@@ -9,39 +9,37 @@ export default function SearchBar({
   handleSearch: (query: string) => void;
 }) {
   const [value, setValue] = useState('');
-  const [isFocused, setFocused] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   const handleOnChangeText = (text: string) => {
     setValue(text);
-    handleSearch(text);
   };
 
   const handleOnFocus = () => {
-    setFocused(true);
+    setIsSearching(true);
   };
 
   const handleOnPressCancel = () => {
-    Keyboard.dismiss()
-    setFocused(false);
-  }
+    Keyboard.dismiss();
+    setIsSearching(false);
+    setValue('');
+    handleSearch('');
+  };
+
+  const handleOnSubmit = () => {
+    handleSearch(value);
+  };
 
   return (
-    <HStack
-      space={2}
-      m="4"
-      mb="3"
-      alignItems="center"
-      alignSelf="center"
-    >
+    <HStack space={1} m="2" mb="2" alignItems="center" alignSelf="center">
       <Input
         bg="white"
-        w={isFocused ? '4/5' : '100%'}
+        w={isSearching ? '4/5' : '100%'}
         onFocus={handleOnFocus}
         placeholder="Search product names and tags"
-        // borderRadius="4"
-        // py="3"
-        // px="1"
-        fontSize="14"
+        py="3"
+        px="1"
+        fontSize="sm"
         InputLeftElement={
           <Icon
             m="2"
@@ -53,8 +51,9 @@ export default function SearchBar({
         }
         value={value}
         onChangeText={handleOnChangeText}
+        onSubmitEditing={handleOnSubmit}
       />
-      {isFocused && (
+      {isSearching && (
         <Button w="1/5" variant="link" onPress={handleOnPressCancel}>
           Cancel
         </Button>
