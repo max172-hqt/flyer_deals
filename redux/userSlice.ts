@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { CartItem, Product, User } from '../types';
+import type { CartItem, User } from '../types';
 
 export interface UserState {
   user: User | null;
@@ -26,6 +26,11 @@ export const userSlice = createSlice({
       state.user = null;
       state.isLoggedIn = false;
     },
+    setCart: (state, action: PayloadAction<CartItem[]>) => {
+      for (const cartItem of action.payload) {
+        state.cart[cartItem.id] = cartItem;
+      }
+    },
     addProductToCart: (
       state,
       action: PayloadAction<{ id: string; cartItem: CartItem }>
@@ -39,6 +44,6 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, resetUser, addProductToCart, removeProductFromCart } =
+export const { setUser, resetUser, setCart, addProductToCart, removeProductFromCart } =
   userSlice.actions;
 export default userSlice.reducer;

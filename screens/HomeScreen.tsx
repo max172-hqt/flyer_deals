@@ -2,8 +2,9 @@ import React from 'react';
 import ProductList from '../components/ProductList';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProductDetailScreen from './ProductDetailScreen';
+import type { ProductListStackParamList } from '../types';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<ProductListStackParamList>();
 
 export default function HomeScreen() {
   return (

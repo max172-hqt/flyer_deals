@@ -3,8 +3,9 @@ import React, { useMemo } from 'react';
 import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
 import ShoppingListItem from '../components/ShoppingListItem';
+import { ShoppingListProps } from '../types';
 
-export default function ShoppingList({ navigation }: { navigation: any }) {
+export default function ShoppingList({ navigation }: ShoppingListProps) {
   const cart = useSelector((state: RootState) => state.user.cart);
 
   const handleGoToDetail = () => {

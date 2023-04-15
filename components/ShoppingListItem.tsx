@@ -61,7 +61,7 @@ function ShoppingListItem({
                 >
                   {salePrice}
                 </Text>
-                {regularPrice && (
+                {regularPrice !== null && regularPrice.length > 0 && (
                   <Text
                     _light={{
                       color: 'gray.500',

@@ -11,16 +11,14 @@ import {
   DocumentData,
   Query,
   startAfter,
-  orderBy,
   or,
   where,
   and,
   addDoc,
-  doc,
   deleteDoc,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import type { Product, ProductData, User } from '../types';
+import type { CartItem, Product, ProductData, User } from '../types';
 
 export async function dbGetProducts(
   numberOfItems: number,
@@ -58,7 +56,7 @@ export async function dbGetProducts(
 
   const nextLast = snaps.docs[snaps.docs.length - 1];
 
-  if (!nextLast) {
+  if (snaps.size < numberOfItems) {
     ended = true;
   }
 
@@ -68,7 +66,7 @@ export async function dbGetProducts(
 }
 
 export async function dbSearchProductsByPrefix(
-  prefix: string = '',
+  prefix = '',
   numberOfItems: number
 ): Promise<Product[]> {
   const products: Product[] = [];
@@ -105,16 +103,11 @@ export async function dbAddToCart(
   user: User,
   product: Product
 ): Promise<string> {
-  if (!user) throw new Error("Unauthenticated");
-  try {
-    const docRef = await addDoc(db.cartsCollection, {
-      product,
-      userId: user.uid,
-    });
-    return docRef.id;
-  } catch (e) {
-    throw e;
-  }
+  const docRef = await addDoc(db.cartsCollection, {
+    product,
+    userId: user.uid,
+  });
+  return docRef.id;
 }
 
 export async function dbRemoveFromCart(id: string) {
@@ -128,17 +121,23 @@ export async function dbRemoveFromCart(id: string) {
   }
 }
 
-// export async function dbUpdateStatus(id) {
-//   const docRef = doc(db, tasksCollection, id);
-//   try {
-//     const docSnap = await getDoc(docRef);
-//     if (docSnap.exists()) {
-//       const completed = docSnap.data().completed;
-//       await updateDoc(docRef, {
-//         completed: !completed,
-//       });
-//     }
-//   } catch (e) {
-//     throw e;
-//   }
-// }
+export async function dbGetCart(user: User): Promise<CartItem[]> {
+  const getDataQuery = query(
+    db.cartsCollection,
+    where('userId', '==', user.uid)
+  );
+  const snaps = await getDocs(getDataQuery);
+  const cartItems: CartItem[] = [];
+
+  snaps.forEach((doc) => {
+    const product = doc.data().product as Product;
+    const cartItem: CartItem = {
+      id: product.id,
+      firebaseRefId: doc.id,
+      data: product.data,
+    };
+    cartItems.push(cartItem);
+  });
+
+  return cartItems;
+}

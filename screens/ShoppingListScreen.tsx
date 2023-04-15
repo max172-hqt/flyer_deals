@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ShoppingList from '../components/ShoppingList';
 import ProductDetailScreen from './ProductDetailScreen';
@@ -7,35 +7,74 @@ import { useSelector, useDispatch } from 'react-redux';
 import LoginForm from '../components/LoginForm';
 import Unauthenticated from '../components/Unauthenticated';
 import SignupForm from '../components/SignupForm';
+import { dbGetCart } from '../database/db';
+import { setCart } from '../redux/userSlice';
+import LoadingScreen from '../components/LoadingScreen';
+import type {
+  AuthenticateStackParamList,
+  ShoppingListStackParamList,
+} from '../types';
 
-const Stack = createStackNavigator();
+const AuthenticateStack = createStackNavigator<AuthenticateStackParamList>();
+const ShoppingListStack = createStackNavigator<ShoppingListStackParamList>();
 
 export default function ShoppingListScreen() {
+  const [isLoading, setLoading] = useState(false);
   const { isLoggedIn, user } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      if (isLoggedIn && user) {
+        setLoading(true);
+        const cartItems = await dbGetCart(user);
+        dispatch(setCart(cartItems));
+        setLoading(false);
+      }
+    })();
+  }, [isLoggedIn]);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   if (!isLoggedIn) {
     return (
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Unauthenticated" component={Unauthenticated} 
-        options={{
-          title: 'Please log in to continue'
-        }}/>
-        <Stack.Screen name="Log In" component={LoginForm} />
-        <Stack.Screen name="Sign Up" component={SignupForm} />
-      </Stack.Navigator>
+      <AuthenticateStack.Navigator initialRouteName="Login">
+        <AuthenticateStack.Screen
+          name="Unauthenticated"
+          component={Unauthenticated}
+          options={{
+            title: 'Please log in to continue',
+          }}
+        />
+        <AuthenticateStack.Screen
+          name="Login"
+          component={LoginForm}
+          options={{ title: 'Log In' }}
+        />
+        <AuthenticateStack.Screen
+          name="Signup"
+          component={SignupForm}
+          options={{ title: 'Sign Up' }}
+        />
+      </AuthenticateStack.Navigator>
     );
   }
 
   return (
-    <Stack.Navigator initialRouteName="List">
-      <Stack.Screen
+    <ShoppingListStack.Navigator initialRouteName="List">
+      <ShoppingListStack.Screen
         name="List"
         component={ShoppingList}
         options={{
           title: 'Shopping List',
         }}
       />
-      <Stack.Screen name="Details" component={ProductDetailScreen} />
-    </Stack.Navigator>
+      <ShoppingListStack.Screen
+        name="Details"
+        component={ProductDetailScreen}
+      />
+    </ShoppingListStack.Navigator>
   );
 }

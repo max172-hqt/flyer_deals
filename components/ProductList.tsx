@@ -1,7 +1,6 @@
-import { FlatList, Spinner, VStack, Heading } from 'native-base';
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { FlatList, Spinner, VStack } from 'native-base';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
-  Product,
   dbGetProducts,
   dbSearchProductsByPrefix,
 } from '../database/db';
@@ -11,28 +10,13 @@ import SearchBar from './SearchBar';
 import { RootState } from '../redux/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { appendProducts, setProducts, setSearchResults } from '../redux/productSlice';
-import { ProductFlatListProps } from '../types';
+import { ProductFlatListProps, ProductListProps } from '../types';
+import LoadingScreen from './LoadingScreen';
 
 const NUMBER_OF_ITEMS = 10;
 
 const ListFooter = () => {
   return <Spinner accessibilityLabel="Loading posts" size="sm" m="8" />;
-};
-
-const LoadingScreen = () => {
-  return (
-    <VStack
-      flex="1"
-      alignItems="center"
-      justifyContent="center"
-      space="2"
-    >
-      <Spinner accessibilityLabel="Loading posts" size="lg" />
-      <Heading color="primary.500" fontSize="md">
-        Loading Deals
-      </Heading>
-    </VStack>
-  );
 };
 
 const ProductFlatList = ({
@@ -41,6 +25,7 @@ const ProductFlatList = ({
   handleGoToDetail,
   isLoading,
 }: ProductFlatListProps) => {
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -63,7 +48,7 @@ const ProductFlatList = ({
   );
 };
 
-export default function ProductList({ navigation }: { navigation: any }) {
+export default function ProductList({ navigation }: ProductListProps) {
   const dispatch = useDispatch();
   const products = useSelector((state: RootState) => state.product.products);
   const searchResults = useSelector(
@@ -77,7 +62,7 @@ export default function ProductList({ navigation }: { navigation: any }) {
     useState<QueryDocumentSnapshot<DocumentData>>();
 
   useEffect(() => {
-    return;
+    // return;
     (async () => {
       setIsLoading(true);
       const [newProducts, snap, ended] = await dbGetProducts(NUMBER_OF_ITEMS);
@@ -89,7 +74,7 @@ export default function ProductList({ navigation }: { navigation: any }) {
   }, []);
 
   useEffect(() => {
-    return;
+    // return;
     (async () => {
       if (query.length !== 0) {
         setIsLoading(true);

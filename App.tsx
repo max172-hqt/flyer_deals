@@ -9,8 +9,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { registerRootComponent } from 'expo';
+import type { RootBottomTabParamList } from './types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootBottomTabParamList>();
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
 
               if (route.name === 'Home') {
                 iconName = focused ? 'home' : 'home-outline';
-              } else if (route.name === 'Shopping List') {
+              } else if (route.name === 'Cart') {
                 iconName = focused ? 'cart' : 'cart-outline';
               } else {
                 throw new Error('Unknown tab');
@@ -42,7 +43,9 @@ function App() {
           })}
         >
           <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Shopping List" component={ShoppingListScreen} />
+          <Tab.Screen name="Cart" component={ShoppingListScreen} options={{
+            title: 'Shopping List'
+          }}/>
         </Tab.Navigator>
       </NativeBaseProvider>
     </NavigationContainer>

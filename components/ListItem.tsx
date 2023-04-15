@@ -1,4 +1,3 @@
-import { Product } from '../database/db';
 import {
   AspectRatio,
   Box,
@@ -13,6 +12,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentProduct } from '../redux/productSlice';
 import AddToCartButton from './AddToCartButton';
+import type { Product } from '../types';
 
 function ListItem({
   item,
@@ -55,7 +55,7 @@ function ListItem({
                 >
                   {salePrice}
                 </Text>
-                {regularPrice && (
+                {regularPrice !== null && regularPrice.length > 0 && (
                   <Text
                     _light={{
                       color: 'gray.500',

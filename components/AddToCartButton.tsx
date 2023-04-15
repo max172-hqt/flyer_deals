@@ -16,7 +16,7 @@ export default function AddToCartButton({ item }: { item: Product }) {
     if (user && cart.hasOwnProperty(item.id)) {
       setAdded(true);
     }
-  }, []);
+  }, [user, cart]);
 
   // sync with db
   const addCartItem = async () => {
