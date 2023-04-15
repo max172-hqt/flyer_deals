@@ -13,7 +13,7 @@ export default function AddToCartButton({ item }: { item: Product }) {
   const [isLoading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (user && cart.hasOwnProperty(item.id)) {
+    if (user && item.id in cart) {
       setAdded(true);
     }
   }, [user, cart]);

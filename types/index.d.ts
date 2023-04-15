@@ -8,6 +8,11 @@ export interface ProductFlatListProps {
   isLoading: boolean;
 }
 
+export type RootBottomTabParamList = {
+  Home: undefined;
+  Cart: undefined;
+}
+
 export type ProductListStackParamList = {
   List: undefined;
   Details: undefined;
@@ -27,6 +32,7 @@ export type AuthenticateStackParamList = {
 export type ProductListProps = StackScreenProps<ProductListStackParamList, 'List'>
 export type ShoppingListProps = StackScreenProps<ShoppingListStackParamList, 'List'>
 export type UnauthenticatedProps = StackScreenProps<AuthenticateStackParamList, 'Unauthenticated'>
+export type LoginProps = StackScreenProps<AuthenticateStackParamList, 'Login'>
 
 // ========== ENTITIES ==========
 export interface ProductData {

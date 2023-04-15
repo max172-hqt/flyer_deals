@@ -14,8 +14,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../database/auth';
 import { setUser } from '../redux/userSlice';
+import type { LoginProps } from '../types';
 
-export default function LoginForm({ navigation }: { navigation: any }) {
+export default function LoginForm({ navigation }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(false);
@@ -76,7 +77,7 @@ export default function LoginForm({ navigation }: { navigation: any }) {
           </Button>
           <HStack mt="6" justifyContent="center">
             <Text fontSize="sm">I'm a new user. </Text>
-            <Link onPress={() => navigation.navigate('Sign Up')}>Sign Up</Link>
+            <Link onPress={() => navigation.navigate('Signup')}>Sign Up</Link>
           </HStack>
         </VStack>
       </Box>
