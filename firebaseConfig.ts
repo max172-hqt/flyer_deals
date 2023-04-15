@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, doc } from 'firebase/firestore';
 
 // Optionally import the services that you want to use
 // import {...} from "firebase/auth";
@@ -23,6 +23,8 @@ const database = getFirestore(app);
 
 const db = {
   productsCollection: collection(database, 'products'),
+  cartsCollection: collection(database, 'carts'),
+  getCartItem: (id: string) => doc(database, 'carts', id),
 };
 
 export { db };

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Product } from '../database/db';
 import {
   Box,
   HStack,
@@ -11,6 +10,7 @@ import {
   Badge,
 } from 'native-base';
 import AddToCartButton from './AddToCartButton';
+import type { Product } from '../types';
 
 export default function ListItemDetail({ item }: { item: Product | null }) {
   if (!item) return null;

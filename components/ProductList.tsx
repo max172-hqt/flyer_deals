@@ -11,13 +11,7 @@ import SearchBar from './SearchBar';
 import { RootState } from '../redux/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { appendProducts, setProducts, setSearchResults } from '../redux/productSlice';
-
-interface ProductFlatListProps {
-  products: Product[];
-  onEndReached?: () => void;
-  handleGoToDetail: () => void;
-  isLoading: boolean;
-}
+import { ProductFlatListProps } from '../types';
 
 const NUMBER_OF_ITEMS = 10;
 
@@ -83,7 +77,7 @@ export default function ProductList({ navigation }: { navigation: any }) {
     useState<QueryDocumentSnapshot<DocumentData>>();
 
   useEffect(() => {
-    // return;
+    return;
     (async () => {
       setIsLoading(true);
       const [newProducts, snap, ended] = await dbGetProducts(NUMBER_OF_ITEMS);
@@ -95,7 +89,7 @@ export default function ProductList({ navigation }: { navigation: any }) {
   }, []);
 
   useEffect(() => {
-    // return;
+    return;
     (async () => {
       if (query.length !== 0) {
         setIsLoading(true);
@@ -110,7 +104,7 @@ export default function ProductList({ navigation }: { navigation: any }) {
   }, [query]);
 
   const onEndReached = useCallback(async () => {
-    // return;
+    return;
     if (ended || isLoading || query.length > 0) return;
 
     setIsLoading(true);

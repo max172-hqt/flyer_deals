@@ -1,33 +1,81 @@
-import { Product } from '../database/db';
+import { dbAddToCart, dbRemoveFromCart } from '../database/db';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { Button } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { addProductToCart, removeProductFromCart } from '../redux/productSlice';
+import { addProductToCart, removeProductFromCart } from '../redux/userSlice';
+import type { Product } from '../types';
 
 export default function AddToCartButton({ item }: { item: Product }) {
   const [added, setAdded] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const cart = useSelector((state: RootState) => state.product.cart);
+  const { user, cart } = useSelector((state: RootState) => state.user);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (cart.hasOwnProperty(item.id)) {
+    if (user && cart.hasOwnProperty(item.id)) {
       setAdded(true);
     }
-  }, [])
+  }, []);
 
-  const handleOnPressed = () => {
-    if (added) {
+  // sync with db
+  const addCartItem = async () => {
+    if (!user) {
+      return;
+    }
+
+    console.log('add', user, item);
+
+    try {
+      const refId = await dbAddToCart(user, item);
+      dispatch(
+        addProductToCart({
+          id: item.id,
+          cartItem: { ...item, firebaseRefId: refId },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const removeCartItem = async () => {
+    if (!user) {
+      return;
+    }
+
+    console.log('remove', user, item, cart);
+
+    try {
+      await dbRemoveFromCart(cart[item.id].firebaseRefId);
       dispatch(removeProductFromCart(item.id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleOnPressed = async () => {
+    setLoading(true);
+    if (added) {
+      await removeCartItem();
       setAdded(false);
     } else {
-      dispatch(addProductToCart(item));
+      await addCartItem();
       setAdded(true);
     }
+    setLoading(false);
+  };
+
+  if (!user) {
+    return null;
   }
 
   return (
-    <Button onPress={handleOnPressed}>
+    <Button
+      onPress={handleOnPressed}
+      isLoading={isLoading}
+      isLoadingText={added ? 'Removing' : 'Adding'}
+    >
       {added ? 'Remove From Cart' : 'Add To Cart'}
     </Button>
   );

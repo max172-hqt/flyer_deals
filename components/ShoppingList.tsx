@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import ShoppingListItem from '../components/ShoppingListItem';
 
 export default function ShoppingList({ navigation }: { navigation: any }) {
-  const cart = useSelector((state: RootState) => state.product.cart);
+  const cart = useSelector((state: RootState) => state.user.cart);
 
   const handleGoToDetail = () => {
     navigation.navigate('Details');
@@ -14,15 +14,13 @@ export default function ShoppingList({ navigation }: { navigation: any }) {
   const data = useMemo(
     () =>
       Object.keys(cart).map((id) => ({
-        id,
-        data: cart[id],
+        ...cart[id],
       })),
     [cart]
   );
 
   return (
     <FlatList
-      // bg="white"
       data={data}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (

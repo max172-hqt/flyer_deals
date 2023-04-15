@@ -1,4 +1,3 @@
-import { Product } from '../database/db';
 import {
   AspectRatio,
   Box,
@@ -13,16 +12,17 @@ import {
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentProduct } from '../redux/productSlice';
+import type { CartItem } from '../types';
 
 function ShoppingListItem({
   item,
   handleGoToDetail,
 }: {
-  item: Product;
+  item: CartItem;
   handleGoToDetail: () => void;
 }) {
   const dispatch = useDispatch();
-  const { name, imageUrl, salePrice, regularPrice, description } = item.data;
+  const { name, imageUrl, salePrice, regularPrice } = item.data;
 
   const handleOnPressItem = () => {
     dispatch(setCurrentProduct(item));
@@ -84,8 +84,8 @@ function ShoppingListItem({
 }
 
 function itemPropsAreEqual(
-  prevProps: Readonly<{ item: Product }>,
-  nextProps: Readonly<{ item: Product }>
+  prevProps: Readonly<{ item: CartItem }>,
+  nextProps: Readonly<{ item: CartItem }>
 ): boolean {
   return prevProps.item.id === nextProps.item.id;
 }

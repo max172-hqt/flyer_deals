@@ -15,22 +15,12 @@ import {
   or,
   where,
   and,
+  addDoc,
+  doc,
+  deleteDoc,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-
-export interface Product {
-  id: string;
-  data: ProductData;
-}
-
-export interface ProductData {
-  name: string;
-  salePrice: string | null | undefined;
-  regularPrice: string | null | undefined;
-  imageUrl: string;
-  description: string;
-  tags: string[];
-}
+import type { Product, ProductData, User } from '../types';
 
 export async function dbGetProducts(
   numberOfItems: number,
@@ -111,28 +101,32 @@ export async function dbSearchProductsByPrefix(
   return products;
 }
 
-// export async function dbCreateTask({ description, completed }) {
-//   try {
-//     const docRef = await addDoc(collection(db, tasksCollection), {
-//       description,
-//       completed,
-//     });
-//     return docRef.id;
-//   } catch (e) {
-//     console.error('Error adding document: ', e);
-//     return null;
-//   }
-// }
+export async function dbAddToCart(
+  user: User,
+  product: Product
+): Promise<string> {
+  if (!user) throw new Error("Unauthenticated");
+  try {
+    const docRef = await addDoc(db.cartsCollection, {
+      product,
+      userId: user.uid,
+    });
+    return docRef.id;
+  } catch (e) {
+    throw e;
+  }
+}
 
-// export async function dbDeleteTask(id) {
-//   const dbDoc = doc(db, tasksCollection, id);
-//   try {
-//     await deleteDoc(dbDoc);
-//     return true;
-//   } catch (e) {
-//     throw e;
-//   }
-// }
+export async function dbRemoveFromCart(id: string) {
+  const dbDoc = db.getCartItem(id);
+  try {
+    await deleteDoc(dbDoc);
+    return true;
+  } catch (e) {
+    console.error('Error removing document: ', e);
+    return null;
+  }
+}
 
 // export async function dbUpdateStatus(id) {
 //   const docRef = doc(db, tasksCollection, id);
