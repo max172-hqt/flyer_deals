@@ -5,6 +5,7 @@ import {
   FormControl,
   Heading,
   Input,
+  Toast,
   VStack,
   WarningOutlineIcon,
 } from 'native-base';
@@ -31,6 +32,10 @@ export default function SignupForm() {
       setLoading(true);
       const user = await signup(email, password);
       dispatch(setUser({ uid: user.uid, email: user.email }));
+      Toast.show({
+        description: 'Welcome! ' + user.email,
+        duration: 1000,
+      });
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -94,7 +99,7 @@ export default function SignupForm() {
             mt="2"
             onPress={handleSignup}
             isLoading={isLoading}
-            isLoadingText="Logging In"
+            isLoadingText="Signing Up"
             isDisabled={
               email.length === 0 ||
               password.length === 0 ||

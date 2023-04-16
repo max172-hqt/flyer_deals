@@ -12,6 +12,7 @@ import { registerRootComponent } from 'expo';
 import type { RootBottomTabParamList } from './types';
 import AccountScreen from './screens/AccountScreen';
 import { lightGray, theme, themeColor } from './utils/constants';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 const Tab = createBottomTabNavigator<RootBottomTabParamList>();
 
@@ -45,16 +46,28 @@ function App() {
             },
           })}
         >
-          <Tab.Screen name="Home" component={HomeScreen} options={{
-            title: 'Weekly Deals'
-          }}/>
-          <Tab.Screen name="Cart" component={ShoppingListScreen} options={{
-            title: 'Shopping List'
-          }}/>
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              title: 'Weekly Deals',
+            }}
+          />
+          <Tab.Screen
+            name="Cart"
+            component={ShoppingListScreen}
+            options={{
+              title: 'Shopping List',
+            }}
+          />
           {isLoggedIn && (
-            <Tab.Screen name="Account" component={AccountScreen} options={{
-              title: 'Account'
-            }}/>
+            <Tab.Screen
+              name="Account"
+              component={AccountScreen}
+              options={{
+                title: 'Account',
+              }}
+            />
           )}
         </Tab.Navigator>
       </NativeBaseProvider>
@@ -64,9 +77,11 @@ function App() {
 
 const RootComponent = () => {
   return (
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <RootSiblingParent>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </RootSiblingParent>
   );
 };
 

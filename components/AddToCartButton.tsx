@@ -1,7 +1,7 @@
 import { dbAddToCart, dbRemoveFromCart } from '../database/db';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { Button } from 'native-base';
+import { Button, Toast } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { addProductToCart, removeProductFromCart } from '../redux/userSlice';
 import type { Product } from '../types';
@@ -32,6 +32,10 @@ export default function AddToCartButton({ item }: { item: Product }) {
           cartItem: { ...item, firebaseRefId: refId, done: false },
         })
       );
+      Toast.show({
+        description: 'Item added successfully',
+        duration: 1000,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -45,6 +49,10 @@ export default function AddToCartButton({ item }: { item: Product }) {
     try {
       await dbRemoveFromCart(cart[item.id].firebaseRefId);
       dispatch(removeProductFromCart(item.id));
+      Toast.show({
+        description: 'Item removed successfully',
+        duration: 1000,
+      });
     } catch (err) {
       console.error(err);
     }

@@ -10,6 +10,7 @@ import {
   VStack,
   Text,
   WarningOutlineIcon,
+  Toast,
 } from 'native-base';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -29,6 +30,10 @@ export default function LoginForm({ navigation }: LoginProps) {
       setLoading(true);
       const user = await login(email, password);
       dispatch(setUser({ uid: user.uid, email: user.email }));
+      Toast.show({
+        description: 'Welcome Back! ' + user.email,
+        duration: 1000,
+      });
       setLoading(false);
     } catch (err) {
       console.error(err);
