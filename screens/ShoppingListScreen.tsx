@@ -14,6 +14,7 @@ import type {
   AuthenticateStackParamList,
   ShoppingListStackParamList,
 } from '../types';
+import { secondaryColor, themeColor } from '../utils/constants';
 
 const AuthenticateStack = createStackNavigator<AuthenticateStackParamList>();
 const ShoppingListStack = createStackNavigator<ShoppingListStackParamList>();
@@ -40,7 +41,18 @@ export default function ShoppingListScreen() {
 
   if (!isLoggedIn) {
     return (
-      <AuthenticateStack.Navigator initialRouteName="Unauthenticated">
+      <AuthenticateStack.Navigator
+        initialRouteName="Unauthenticated"
+        screenOptions={() => ({
+          headerStyle: {
+            backgroundColor: themeColor,
+          },
+          headerTintColor: secondaryColor,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        })}
+      >
         <AuthenticateStack.Screen
           name="Unauthenticated"
           component={Unauthenticated}
@@ -63,7 +75,18 @@ export default function ShoppingListScreen() {
   }
 
   return (
-    <ShoppingListStack.Navigator initialRouteName="List">
+    <ShoppingListStack.Navigator
+      initialRouteName="List"
+      screenOptions={() => ({
+        headerStyle: {
+          backgroundColor: themeColor,
+        },
+        headerTintColor: secondaryColor,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      })}
+    >
       <ShoppingListStack.Screen
         name="List"
         component={ShoppingList}

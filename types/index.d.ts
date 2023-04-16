@@ -1,3 +1,4 @@
+import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import type { StackScreenProps } from "@react-navigation/stack";
 
 // ========== COMPONENT PROPS ==========
@@ -11,6 +12,7 @@ export interface ProductFlatListProps {
 export type RootBottomTabParamList = {
   Home: undefined;
   Cart: undefined;
+  Account: undefined;
 }
 
 export type ProductListStackParamList = {
@@ -29,6 +31,7 @@ export type AuthenticateStackParamList = {
   Signup: undefined;
 };
 
+export type AccountProps = BottomTabBarProps<RootBottomTabParamList, 'Account'>
 export type ProductListProps = StackScreenProps<ProductListStackParamList, 'List'>
 export type ShoppingListProps = StackScreenProps<ShoppingListStackParamList, 'List'>
 export type UnauthenticatedProps = StackScreenProps<AuthenticateStackParamList, 'Unauthenticated'>

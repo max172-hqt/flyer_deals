@@ -1,4 +1,4 @@
-import { FlatList } from 'native-base';
+import { FlatList, Heading, VStack } from 'native-base';
 import React, { useMemo } from 'react';
 import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
@@ -20,7 +20,15 @@ export default function ShoppingList({ navigation }: ShoppingListProps) {
     [cart]
   );
 
-  // console.log(data);
+  if (data.length === 0) {
+    return (
+      <VStack flex="1" alignItems="center" justifyContent="center" space="2">
+      <Heading color="light.400" fontSize="md">
+        Your shopping cart is currently empty.
+      </Heading>
+    </VStack>
+    )
+  }
 
   return (
     <FlatList

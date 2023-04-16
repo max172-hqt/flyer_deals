@@ -8,7 +8,8 @@ export default function Unauthenticated({ navigation }: UnauthenticatedProps) {
       bg="white"
       space="4"
       flex={1}
-      alignItems="center"
+      p="8"
+      // alignItems="center"
       justifyContent="center"
     >
       <Heading fontSize="md" fontWeight="500">

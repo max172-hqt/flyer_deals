@@ -6,6 +6,7 @@ import {
   Heading,
   Input,
   VStack,
+  WarningOutlineIcon,
 } from 'native-base';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -17,9 +18,15 @@ export default function SignupForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [valid, setValid] = useState(true);
   const dispatch = useDispatch();
 
   const handleSignup = async () => {
+    if (password !== confirmPassword) {
+      setValid(false);
+      return;
+    }
+    setValid(true);
     try {
       setLoading(true);
       const user = await signup(email, password);
@@ -27,6 +34,8 @@ export default function SignupForm() {
       setLoading(false);
     } catch (err) {
       console.error(err);
+      setLoading(false);
+      setValid(false);
     }
   };
 
@@ -68,19 +77,29 @@ export default function SignupForm() {
               onChangeText={handlePasswordChange}
             />
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={!valid}>
             <FormControl.Label>Confirm Password</FormControl.Label>
             <Input
               type="password"
               value={confirmPassword}
               onChangeText={handleConfirmPasswordChange}
             />
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="xs" />}
+            >
+              Password fields do not match. Please try again.
+            </FormControl.ErrorMessage>
           </FormControl>
           <Button
             mt="2"
             onPress={handleSignup}
             isLoading={isLoading}
             isLoadingText="Logging In"
+            isDisabled={
+              email.length === 0 ||
+              password.length === 0 ||
+              confirmPassword.length === 0
+            }
           >
             Sign Up
           </Button>

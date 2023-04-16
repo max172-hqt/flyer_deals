@@ -1,4 +1,4 @@
-import type { User } from 'firebase/auth';
+import { User, signOut } from 'firebase/auth';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -21,4 +21,9 @@ export async function signup(email: string, password: string): Promise<User> {
   );
   const user = credential.user;
   return user;
+}
+
+export async function logout() {
+  const auth = getAuth();
+  await signOut(auth);
 }

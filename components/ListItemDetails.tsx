@@ -11,6 +11,7 @@ import {
 } from 'native-base';
 import AddToCartButton from './AddToCartButton';
 import type { Product } from '../types';
+import { lightYellow } from '../utils/constants';
 
 export default function ListItemDetail({ item }: { item: Product | null }) {
   if (!item) return null;
@@ -70,8 +71,9 @@ export default function ListItemDetail({ item }: { item: Product | null }) {
                 {tags.map((tag, index) => (
                   <Badge
                     _text={{
-                      color: 'white',
+                      color: "primary.400",
                     }}
+                    bg={lightYellow}
                     variant="solid"
                     rounded="4"
                     mr="1"

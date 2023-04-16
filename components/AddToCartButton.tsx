@@ -24,8 +24,6 @@ export default function AddToCartButton({ item }: { item: Product }) {
       return;
     }
 
-    console.log('add', user, item);
-
     try {
       const refId = await dbAddToCart(user, item);
       dispatch(
@@ -43,8 +41,6 @@ export default function AddToCartButton({ item }: { item: Product }) {
     if (!user) {
       return;
     }
-
-    console.log('remove', user, item, cart);
 
     try {
       await dbRemoveFromCart(cart[item.id].firebaseRefId);
@@ -75,6 +71,7 @@ export default function AddToCartButton({ item }: { item: Product }) {
       onPress={handleOnPressed}
       isLoading={isLoading}
       isLoadingText={added ? 'Removing' : 'Adding'}
+      variant={added ? 'solid' : 'outline'}
     >
       {added ? 'Remove From Cart' : 'Add To Cart'}
     </Button>

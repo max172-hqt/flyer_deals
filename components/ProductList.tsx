@@ -26,9 +26,9 @@ const ProductFlatList = ({
   isLoading,
 }: ProductFlatListProps) => {
 
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
+  // if (isLoading) {
+  //   return <LoadingScreen />;
+  // }
 
   return (
     <FlatList
@@ -89,7 +89,7 @@ export default function ProductList({ navigation }: ProductListProps) {
   }, [query]);
 
   const onEndReached = useCallback(async () => {
-    return;
+    // return;
     if (ended || isLoading || query.length > 0) return;
 
     setIsLoading(true);

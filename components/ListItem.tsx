@@ -7,12 +7,14 @@ import {
   VStack,
   Heading,
   Text,
+  Badge,
 } from 'native-base';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentProduct } from '../redux/productSlice';
 import AddToCartButton from './AddToCartButton';
 import type { Product } from '../types';
+import { lightYellow } from '../utils/constants';
 
 function ListItem({
   item,
@@ -22,7 +24,8 @@ function ListItem({
   handleGoToDetail: () => void;
 }) {
   const dispatch = useDispatch();
-  const { name, imageUrl, salePrice, regularPrice, description } = item.data;
+  const { name, imageUrl, salePrice, regularPrice, description, tags } =
+    item.data;
 
   const handleOnPressItem = () => {
     dispatch(setCurrentProduct(item));
@@ -48,7 +51,7 @@ function ListItem({
               <HStack justifyContent="flex-start" alignItems="center" space="2">
                 <Text
                   _light={{
-                    color: 'red.500',
+                    color: 'primary.400',
                   }}
                   fontWeight="500"
                   fontSize="lg"
@@ -70,10 +73,27 @@ function ListItem({
               </HStack>
             </VStack>
             <VStack space="2">
-              <Text fontWeight={400} fontSize="xs" numberOfLines={5}>
+              <Text fontWeight={400} fontSize="xs" numberOfLines={3}>
                 {description}
               </Text>
             </VStack>
+            <HStack flexWrap="wrap">
+              {tags.map((tag, index) => (
+                <Badge
+                  _text={{
+                    color: 'primary.400',
+                  }}
+                  bg={lightYellow}
+                  variant="solid"
+                  rounded="4"
+                  mr="1"
+                  mb="1"
+                  key={tag + index}
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </HStack>
             <AddToCartButton item={item} />
           </VStack>
         </HStack>

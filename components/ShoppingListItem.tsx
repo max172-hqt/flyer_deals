@@ -15,6 +15,7 @@ import type { CartItem } from '../types';
 import Checkbox from 'expo-checkbox';
 import { dbUpdateStatus } from '../database/db';
 import { toggleCartItem } from '../redux/userSlice';
+import { themeColor } from '../utils/constants';
 
 export default function ShoppingListItem({
   item,
@@ -33,7 +34,6 @@ export default function ShoppingListItem({
   };
 
   const handleCheckboxChange = async () => {
-    console.log('here');
     try {
       dispatch(toggleCartItem(item.id));
       await dbUpdateStatus(item.firebaseRefId);
@@ -63,7 +63,7 @@ export default function ShoppingListItem({
               <HStack justifyContent="flex-start" alignItems="center" space="2">
                 <Text
                   _light={{
-                    color: 'red.500',
+                    color: 'primary.400',
                   }}
                   fontWeight="500"
                   fontSize="lg"
@@ -86,6 +86,7 @@ export default function ShoppingListItem({
             </VStack>
           </VStack>
           <Checkbox
+            color={themeColor}
             value={done}
             onValueChange={handleCheckboxChange}
             accessibilityLabel="Checkbox to mark the shopping item"

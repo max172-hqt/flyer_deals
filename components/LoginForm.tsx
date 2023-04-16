@@ -9,6 +9,7 @@ import {
   Link,
   VStack,
   Text,
+  WarningOutlineIcon,
 } from 'native-base';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -20,6 +21,7 @@ export default function LoginForm({ navigation }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [valid, setValid] = useState(true);
   const dispatch = useDispatch();
 
   const handleLogIn = async () => {
@@ -30,6 +32,8 @@ export default function LoginForm({ navigation }: LoginProps) {
       setLoading(false);
     } catch (err) {
       console.error(err);
+      setValid(false);
+      setLoading(false);
     }
   };
 
@@ -56,22 +60,26 @@ export default function LoginForm({ navigation }: LoginProps) {
         </Heading>
         <VStack space={3} mt="5">
           <FormControl>
-            <FormControl.Label>Email ID</FormControl.Label>
+            <FormControl.Label>Email</FormControl.Label>
             <Input value={email} onChangeText={handleEmailChange} />
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={!valid}>
             <FormControl.Label>Password</FormControl.Label>
             <Input
               type="password"
               value={password}
               onChangeText={handlePasswordChange}
             />
+            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+              Wrong email or password. Please try again.
+            </FormControl.ErrorMessage>
           </FormControl>
           <Button
             mt="2"
             onPress={handleLogIn}
             isLoading={isLoading}
             isLoadingText="Logging In"
+            isDisabled={email.length === 0 || password.length === 0}
           >
             Log in
           </Button>

@@ -41,7 +41,6 @@ export const userSlice = createSlice({
       delete state.cart[action.payload];
     },
     toggleCartItem: (state, action: PayloadAction<string>) => {
-      console.log(state.cart[action.payload]);
       state.cart[action.payload].done = !state.cart[action.payload].done;
     }
   },

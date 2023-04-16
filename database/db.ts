@@ -26,7 +26,6 @@ export async function dbGetProducts(
   numberOfItems: number,
   lastVisible?: QueryDocumentSnapshot<DocumentData>
 ): Promise<[Product[], QueryDocumentSnapshot<DocumentData>, boolean]> {
-  console.log('calling api', lastVisible);
   const products: Product[] = [];
   let getDataQuery: Query<DocumentData>;
   let ended = false;
@@ -62,8 +61,6 @@ export async function dbGetProducts(
     ended = true;
   }
 
-  console.log('getting ', snaps.size);
-
   return [products, nextLast, ended];
 }
 
@@ -73,7 +70,6 @@ export async function dbSearchProductsByPrefix(
 ): Promise<Product[]> {
   const products: Product[] = [];
   const capitalizedPrefix = prefix.charAt(0).toUpperCase() + prefix.slice(1);
-  console.log(capitalizedPrefix);
 
   const getDataQuery = query(
     db.productsCollection,
