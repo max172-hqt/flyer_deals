@@ -12,7 +12,6 @@ import { registerRootComponent } from 'expo';
 import type { RootBottomTabParamList } from './types';
 import AccountScreen from './screens/AccountScreen';
 import { lightGray, theme, themeColor } from './utils/constants';
-import { RootSiblingParent } from 'react-native-root-siblings';
 
 const Tab = createBottomTabNavigator<RootBottomTabParamList>();
 
@@ -77,11 +76,9 @@ function App() {
 
 const RootComponent = () => {
   return (
-    <RootSiblingParent>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </RootSiblingParent>
+    <Provider store={store}>
+      <App />
+    </Provider>
   );
 };
 
